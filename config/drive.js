@@ -13,7 +13,7 @@ module.exports = {
   | defining a disk name
   |
   */
-  default: 'local', // upload do arquivo para o s3
+  default: 's3', // upload do arquivo para o s3
 
   disks: {
     /*

@@ -10,19 +10,39 @@ const Drive = use('Drive')
 class FileController {
 
   async show({ params, response }) {
-    const file = await File.findOrFail(params.id)
+    
+    try {
+      const file = await File.findOrFail(params.id)
+      const contentType = `${file.type}/${file.subtype}`
+      response.implicitEnd = false
 
-    return response.download(Helpers.tmpPath(`uploads/${file.file}`))
+      response.header('Content-Type', contentType)
+      const stream = await Drive.getStream(file.file)
+
+      stream.pipe(response.response)
+
+    } catch (error) {
+      return response.status(error.status).send({ 
+        error: {
+          message: 'Arquivo não existe',
+          err_message: error.message
+        } 
+      })
+    }
   }
 
   async store ({ request, response }) {
+
     request.multipart.file('file', {}, async file => {      
       try {
         const ContentType = file.headers['content-type']
-        const ACL = 'public-read'
         const Key = `${Date.now()}.${file.subtype}` 
-
-        const url = await Drive.disk('s3').put(Key, file.stream)
+        
+        const url = await Drive.put(Key, file.stream, {
+          ContentType,
+          ACL: 'public-read',          
+        })
+        
 
         await File.create({
           file: Key,
@@ -41,38 +61,26 @@ class FileController {
         })
       }
     })
-    await request.multipart.process()
-    
-    
-    // 
-    /*try {
-      if (!request.file('file')) return
+    await request.multipart.process() 
+   
+  }
 
-      const upload = request.file('file', {size: '2mb'})
+  async destroy ({ params, request, response }) {
+    try {
+      const file = await File.findOrFail(params.id)
+      
+      await Drive.delete(file.file)
 
-      const fileName = `${Date.now()}.${upload.subtype}`
-
-      await upload.move(Helpers.tmpPath('uploads'), {
-        name: fileName
-      })
-
-      if(!upload.moved()) {
-        throw upload.error()
-      }
-
-      const file = await File.create({
-        file: fileName,
-        name: upload.clientName,
-        type: upload.type,
-        subtype: upload.subtype
-      })
-
-      return file
-
+      await file.delete()
 
     } catch (error) {
-      return response.status(error.status).send({ error: {message: 'Erro no upload do arquivo'} })
-    }*/
+      return response.status(error.status).send({ 
+        error: {
+          message: 'Arquivo não existe e não pode ser excluído',
+          err_message: error.message
+        } 
+      })
+    }
   }
 
   

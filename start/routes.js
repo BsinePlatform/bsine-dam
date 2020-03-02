@@ -22,11 +22,14 @@ Route.post('sessions', 'SessionController.store').validator('Session')
 Route.post('passwords', 'ForgotPasswordController.store').validator('ForgotPassword')
 Route.put('passwords', 'ForgotPasswordController.update').validator('ResetPassword')
 
-Route.get('/files/:id', 'FileController.show')
+
 
 Route.group(() => {
-    
+    // Upload files
+    Route.get('/files/:id', 'FileController.show')
     Route.post('/files', 'FileController.store')
+    Route.delete('/files/:id', 'FileController.destroy')
+
     Route.resource('companies', 'CompanyController')
         .apiOnly()
         .validator(new Map(
