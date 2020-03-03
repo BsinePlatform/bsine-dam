@@ -73,5 +73,17 @@ Route.group(() => {
                 ]
             ]
         ))
+    
+    // Routes Departments
+    Route.resource('departments', 'DepartmentController')
+        .apiOnly()
+        .validator(new Map(
+            [
+                [
+                    ['departments.store', 'departments.update'],
+                    ['Department']
+                ]
+            ]
+        ))
 
 }).middleware(['auth'])

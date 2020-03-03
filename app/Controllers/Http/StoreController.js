@@ -102,6 +102,7 @@ class StoreController {
 
     await store.load('company')
     await store.load('user')
+    await store.load('departments')
 
     return store
   }
