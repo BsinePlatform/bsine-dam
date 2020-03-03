@@ -99,6 +99,7 @@ class CompanyController {
 
     await company.load('user')
     await company.load('stores')
+    await company.load('campaigns')
     await company.load('customizations')
     return company
   }

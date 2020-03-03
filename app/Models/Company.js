@@ -12,6 +12,10 @@ class Company extends Model {
         return this.hasMany('App/Models/Store')
     }
 
+    campaigns () {
+        return this.hasMany('App/Models/Campaign')
+    }
+
     customizations () {
         return this.hasMany('App/Models/CompanyCustomization')
     }

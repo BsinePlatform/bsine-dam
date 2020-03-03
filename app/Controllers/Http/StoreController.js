@@ -16,10 +16,8 @@ class StoreController {
    */
   async index ({ params, request, response, view }) {
     const { page } = request.get()
-    const stores = await Store.query()
-      .where('company_id', params.companies_id)
-      .with('user')
-      .paginate(page)
+    const stores = await Store.query().with('user').paginate(page)
+
     return stores
   }
 
@@ -36,6 +34,7 @@ class StoreController {
   async store ({ params, request, response, auth }) {
 
     const data = request.only([
+      "company_id",
       "nm_corporate_name",
       "nm_fantasy_name",
       "nr_cnpj",
@@ -84,7 +83,7 @@ class StoreController {
       "active"
     ]) 
 
-    const store = await Store.create({ ...data, user_id: auth.user.id, company_id: params.companies_id })
+    const store = await Store.create({ ...data, user_id: auth.user.id })
 
     return store
   }
