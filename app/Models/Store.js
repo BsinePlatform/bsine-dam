@@ -11,6 +11,10 @@ class Store extends Model {
     user () {
         return this.belongsTo('App/Models/User')
     }
+
+    departments () {
+        return this.hasMany('App/Models/Department')
+    }
 }
 
 module.exports = Store

@@ -17,7 +17,7 @@ class CompanyController {
    */
   async index ({ request, response, view }) {
     const { page } = request.get()
-    const companies = await Company.query().with('user').paginate(page)
+    const companies = await Company.query().paginate(page)
 
     return companies
   }
@@ -100,6 +100,7 @@ class CompanyController {
     await company.load('user')
     await company.load('stores')
     await company.load('campaigns')
+    await company.load('departments')
     await company.load('customizations')
     return company
   }
