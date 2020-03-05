@@ -60,6 +60,7 @@ class DepartmentController {
 
     await department.load('store')
     await department.load('company')
+    await department.load('users')
     return department
   }
 

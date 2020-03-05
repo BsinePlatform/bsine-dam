@@ -41,7 +41,10 @@ class UserController {
             "nr_whatsapp",
             "nm_linkedin",
             "nm_twitter",
-            "nm_site"
+            "nm_site",
+            "active",
+            "department_id",
+            "company_id"
         ]);
 
         const user = await User.create(data)
@@ -51,6 +54,10 @@ class UserController {
 
     async show({ params, request, response, view }) {
         const user = await User.findOrFail(params.id)
+
+        await user.load('department')
+        await user.load('company')
+        await user.load('profile')
 
         return user
     }
@@ -88,7 +95,10 @@ class UserController {
             "nr_whatsapp",
             "nm_linkedin",
             "nm_twitter",
-            "nm_site"
+            "nm_site",
+            "active",
+            "department_id",
+            "company_id"
         ])
 
         user.merge(data)

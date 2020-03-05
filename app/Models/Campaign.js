@@ -12,6 +12,10 @@ class Campaign extends Model {
         return this.belongsTo('App/Models/Company')
     }
 
+    files () {
+        return this.hasMany('App/Models/File')
+    }
+
 }
 
 module.exports = Campaign

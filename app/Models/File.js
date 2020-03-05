@@ -13,6 +13,14 @@ class File extends Model {
     getUrl ({ id }) {
         return `${Env.get('APP_URL')}/files/${id}`
     }
+
+    company_customization () {
+        return this.belongsTo('App/Models/CompanyCustomization')
+    }
+
+    campaign () {
+        return this.belongsTo('App/Models/Campaign')
+    }
 }
 
 module.exports = File

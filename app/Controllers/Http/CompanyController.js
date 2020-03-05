@@ -1,7 +1,6 @@
 'use strict'
 
 const Company = use('App/Models/Company')
-
 /**
  * Resourceful controller for interacting with companies
  */
