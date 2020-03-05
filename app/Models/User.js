@@ -7,7 +7,7 @@ const Model = use('Model')
 const Hash = use('Hash')
 
 class User extends Model {
-  static boot () {
+  static boot() {
     super.boot()
 
     /**
@@ -31,8 +31,20 @@ class User extends Model {
    *
    * @return {Object}
    */
-  tokens () {
+  tokens() {
     return this.hasMany('App/Models/Token')
+  }
+
+  department() {
+    return this.belongsTo('App/Models/Department')
+  }
+
+  company() {
+    return this.belongsTo('App/Models/Company')
+  }
+
+  profile() {
+    return this.hasOne('App/Models/File')
   }
 }
 

@@ -4,6 +4,13 @@
 const Model = use('Model')
 
 class Company extends Model {
+    static boot () {
+        super.boot()
+
+        this.addHook('afterCreate', 'FolderCompanyHook.createFolder')
+    }
+
+
     user () {
         return this.belongsTo('App/Models/User')
     }

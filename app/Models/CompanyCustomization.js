@@ -11,6 +11,10 @@ class CompanyCustomization extends Model {
     user () {
         return this.belongsTo('App/Models/User')
     }
+
+    files () {
+        return this.hasMany('App/Models/File')
+    }
 }
 
 module.exports = CompanyCustomization
