@@ -4,6 +4,12 @@
 const Model = use('Model')
 
 class Store extends Model {
+    static boot () {
+        super.boot()
+
+        this.addHook('afterCreate', 'FolderStoreHook.createFolder')
+    }
+
     company () {
         return this.belongsTo('App/Models/Company')
     }

@@ -4,9 +4,9 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 
 AWS.config = new AWS.Config();
-AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-AWS.config.region = "us-east-1";
+AWS.config.accessKeyId = process.env.S3_KEY;
+AWS.config.secretAccessKey = process.env.S3_SECRET;
+AWS.config.region = process.env.S3_REGION;
 
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
