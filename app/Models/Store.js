@@ -21,6 +21,10 @@ class Store extends Model {
     departments () {
         return this.hasMany('App/Models/Department')
     }
+
+    folders () {
+        return this.hasMany('App/Models/Folder')
+    }
 }
 
 module.exports = Store

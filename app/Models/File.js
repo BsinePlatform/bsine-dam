@@ -21,6 +21,12 @@ class File extends Model {
     campaign () {
         return this.belongsTo('App/Models/Campaign')
     }
+
+    folders () {
+        return this
+          .belongsToMany('App/Models/Folder')
+          .pivotTable('file_folder')
+      }
 }
 
 module.exports = File

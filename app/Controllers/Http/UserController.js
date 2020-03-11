@@ -58,6 +58,7 @@ class UserController {
         await user.load('department')
         await user.load('company')
         await user.load('profile')
+        await user.load('folders')
 
         return user
     }
