@@ -46,6 +46,10 @@ class User extends Model {
   profile() {
     return this.hasOne('App/Models/File')
   }
+
+  folders () {
+    return this.hasMany('App/Models/Folder')
+  }
 }
 
 module.exports = User

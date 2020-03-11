@@ -85,5 +85,7 @@ Route.group(() => {
                 ]
             ]
         ))
+    
+    Route.resource('folders', 'FolderController').apiOnly()
 
 }).middleware(['auth'])

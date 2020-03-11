@@ -137,8 +137,9 @@ class AwsS3 {
                 function (err, data) {
                     if (err) {
                         console.log("There was an error delete deleting your album: ", err.message);
+                    } else {
+                        console.log("Successfully deleted album.");
                     }
-                    console.log("Successfully deleted album.");
                 }
             );
         });

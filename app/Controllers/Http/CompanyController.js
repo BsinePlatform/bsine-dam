@@ -101,6 +101,7 @@ class CompanyController {
     await company.load('campaigns')
     await company.load('departments')
     await company.load('customizations')
+    await company.load('folders')
     return company
   }
 
