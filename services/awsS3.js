@@ -116,7 +116,7 @@ class AwsS3 {
     }
 
     deleteAlbum(bucket, albumName) {
-        var albumKey = encodeURIComponent(albumName) + "/";
+        var albumKey = albumName + "/";
         var params = {
             Bucket: bucket,
             Prefix: albumKey,
