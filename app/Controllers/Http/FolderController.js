@@ -131,15 +131,15 @@ class FolderController {
       const folder = await Folder.findOrFail(params.id)
 
       let result = await Store.findOrFail(request.body.store_id)
-      let bucket = bucketName + '/' + result.company_id + '/' + result.id
+      let path = result.company_id + '/' + result.id
 
       if (request.body.path) {
-        bucket = bucket + '/' + request.body.path
+        path = path + '/' + request.body.path + '/' + request.body.name
       }
 
       const awsS3 = new AwsS3()
-      awsS3.deleteAlbum(bucket, request.body.name)
-      await folder.delete()  
+      awsS3.deleteAlbum(bucketName, path)
+      await folder.delete()
     } catch (error) {
       return response.status(error.status).send({ error: { message: 'Algo deu errado ao excluir essa pasta' } })
     }
