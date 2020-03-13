@@ -67,7 +67,7 @@ class AwsS3 {
         if (albumName.indexOf("/") !== -1) {
             console.log("Album names cannot contain slashes.");
         }
-        var albumKey = encodeURIComponent(albumName) + "/";
+        var albumKey = albumName + "/";
 
         // Setting up S3 upload parameters
         const params = {
