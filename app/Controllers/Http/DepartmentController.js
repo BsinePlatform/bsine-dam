@@ -19,7 +19,7 @@ class DepartmentController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
     const { page } = request.get()
     const departments = await Department.query().paginate(page)
 
@@ -34,16 +34,24 @@ class DepartmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-    const data = request.only([
-      "nm_department",
-      "company_id",
-      "store_id"
-    ])
+  async store({ request, response }) {
+    try {
+      const data = request.only([
+        "nm_department",
+        "company_id",
+        "store_id"
+      ])
 
-    const department = await Department.create(data)
+      const department = await Department.create(data)
 
-    return department
+      return department
+
+    } catch (error) {
+      return response.status(error.status).send({
+        message: 'Erro ao tentar criar o departamento.',
+        err_message: error.message
+      })
+    }
   }
 
   /**
@@ -55,13 +63,21 @@ class DepartmentController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-    const department = await Department.findOrFail(params.id)
+  async show({ params, request, response, view }) {
+    try {
+      const department = await Department.findOrFail(params.id)
 
-    await department.load('store')
-    await department.load('company')
-    await department.load('users')
-    return department
+      await department.load('store')
+      await department.load('company')
+      await department.load('users')
+      return department
+
+    } catch (error) {
+      return response.status(error.status).send({
+        message: 'Erro ao tentar buscar o departamento.',
+        err_message: error.message
+      })
+    }
   }
 
   /**
@@ -72,20 +88,28 @@ class DepartmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-    const department = await Department.findOrFail(params.id)
+  async update({ params, request, response }) {
+    try {
+      const department = await Department.findOrFail(params.id)
 
-    const data = request.only([
-      "nm_department",
-      "company_id",
-      "store_id"
-    ])
+      const data = request.only([
+        "nm_department",
+        "company_id",
+        "store_id"
+      ])
 
-    department.merge(data)
+      department.merge(data)
 
-    await department.save()
+      await department.save()
 
-    return department
+      return department
+
+    } catch (error) {
+      return response.status(error.status).send({
+        message: 'Erro ao tentar atualizar o departamento.',
+        err_message: error.message
+      })
+    }
 
   }
 
@@ -97,10 +121,18 @@ class DepartmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-    const department = await Department.findOrFail(params.id)
+  async destroy({ params, request, response }) {
+    try {
+      const department = await Department.findOrFail(params.id)
 
-    await department.delete()
+      await department.delete()
+
+    } catch (error) {
+      return response.status(error.status).send({
+        message: 'Erro ao tentar excluir o departamento.',
+        err_message: error.message
+      })
+    }
   }
 }
 

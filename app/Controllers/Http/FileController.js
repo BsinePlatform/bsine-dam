@@ -1,7 +1,7 @@
 'use strict'
 
 const File = use('App/Models/File')
-const Helpers = use('Helpers') 
+const Helpers = use('Helpers')
 const Drive = use('Drive')
 
 /**
@@ -10,7 +10,7 @@ const Drive = use('Drive')
 class FileController {
 
   async show({ params, response }) {
-    
+
     try {
       const file = await File.findOrFail(params.id)
       const contentType = `${file.type}/${file.subtype}`
@@ -22,27 +22,27 @@ class FileController {
       stream.pipe(response.response)
 
     } catch (error) {
-      return response.status(error.status).send({ 
+      return response.status(error.status).send({
         error: {
           message: 'Arquivo não existe',
           err_message: error.message
-        } 
+        }
       })
     }
   }
 
-  async store ({ request, response }) {
+  async store({ request, response }) {
 
-    request.multipart.file('file', {}, async file => {      
+    request.multipart.file('file', {}, async file => {
       try {
         const ContentType = file.headers['content-type']
-        const Key = `${Date.now()}.${file.subtype}` 
-        
+        const Key = `${Date.now()}.${file.subtype}`
+
         const url = await Drive.put(Key, file.stream, {
           ContentType,
-          ACL: 'public-read',          
+          ACL: 'public-read',
         })
-        
+
 
         await File.create({
           file: Key,
@@ -51,39 +51,39 @@ class FileController {
           file_path: url,
           subtype: file.subtype
         })
-        
+
       } catch (error) {
-        return response.status(error.status).send({ 
+        return response.status(error.status).send({
           error: {
             message: 'Erro no upload do arquivo',
             err_message: error.message
-          } 
+          }
         })
       }
     })
-    await request.multipart.process() 
-   
+    await request.multipart.process()
+
   }
 
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
     try {
       const file = await File.findOrFail(params.id)
-      
+
       await Drive.delete(file.file)
 
       await file.delete()
 
     } catch (error) {
-      return response.status(error.status).send({ 
+      return response.status(error.status).send({
         error: {
           message: 'Arquivo não existe e não pode ser excluído',
           err_message: error.message
-        } 
+        }
       })
     }
   }
 
-  
+
 }
 
 module.exports = FileController
