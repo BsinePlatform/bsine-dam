@@ -15,7 +15,7 @@ class CampaignController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
     const { page } = request.get()
     const campaign = await Campaign.query().with('user').paginate(page)
 
@@ -30,19 +30,29 @@ class CampaignController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response, auth }) {
-    const data = request.only([
-      "company_id",
-      "nm_campaign",
-      "nm_description",
-      "dt_ini",
-      "dt_end",
-      "active"
-    ]) 
+  async store({ request, response, auth }) {
+    try {
+      const data = request.only([
+        "company_id",
+        "nm_campaign",
+        "nm_description",
+        "dt_ini",
+        "dt_end",
+        "active"
+      ])
 
-    const campaign = await Campaign.create({ ...data, user_id: auth.user.id })    
+      const campaign = await Campaign.create({ ...data, user_id: auth.user.id })
 
-    return campaign
+      return campaign
+
+    } catch (error) {
+      return response.status(error.status).send({
+        error: {
+          message: 'Erro ao criar a campanha.',
+          err_message: error.message
+        }
+      })
+    }
   }
 
   /**
@@ -54,13 +64,23 @@ class CampaignController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-    const campaign = await Campaign.findOrFail(params.id)
+  async show({ params, request, response, view }) {
+    try {
+      const campaign = await Campaign.findOrFail(params.id)
 
-    await campaign.load('company')
-    await campaign.load('user')
+      await campaign.load('company')
+      await campaign.load('user')
 
-    return campaign
+      return campaign
+
+    } catch (error) {
+      return response.status(error.status).send({
+        error: {
+          message: 'Erro ao tentar buscar a campanha.',
+          err_message: error.message
+        }
+      })
+    }
   }
 
   /**
@@ -71,23 +91,32 @@ class CampaignController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-    const campaign = await Campaign.findOrFail(params.id)
+  async update({ params, request, response }) {
+    try {
+      const campaign = await Campaign.findOrFail(params.id)
 
-    const data = request.only([
-      "nm_campaign",
-      "nm_description",
-      "dt_ini",
-      "dt_end",
-      "active"
-    ]) 
+      const data = request.only([
+        "nm_campaign",
+        "nm_description",
+        "dt_ini",
+        "dt_end",
+        "active"
+      ])
 
-    campaign.merge(data)
+      campaign.merge(data)
 
-    await campaign.save()
+      await campaign.save()
 
-    return campaign
+      return campaign
 
+    } catch (error) {
+      return response.status(error.status).send({
+        error: {
+          message: 'Erro ao tentar atualizar a campanha.',
+          err_message: error.message
+        }
+      })
+    }
 
   }
 
@@ -99,10 +128,20 @@ class CampaignController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-    const campaign = await Campaign.findOrFail(params.id)
+  async destroy({ params, request, response }) {
+    try {
+      const campaign = await Campaign.findOrFail(params.id)
 
-    await campaign.delete()
+      await campaign.delete()
+
+    } catch (error) {
+      return response.status(error.status).send({
+        error: {
+          message: 'Erro ao tentar excluir a campanha.',
+          err_message: error.message
+        }
+      })
+    }
   }
 }
 
